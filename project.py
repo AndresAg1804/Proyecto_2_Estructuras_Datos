@@ -19,7 +19,7 @@ dict_ERRORES = {
 }
 #---------------------------------Error Class----------------------------------------------
 class Error:
-    def __init__(self,nl="",e=-1):
+    def _init_(self,nl="",e=-1):
         self.nl=nl
         self.codeError=e
     def get_string2lookUP(self):
@@ -123,18 +123,13 @@ for j in LineaXLinea:
                 der=valores[posi:].removeprefix('>=').strip()
                 dict_code[Fun_key]['if']=str(nL)+"#"+izq+'_'+der
         #(if)----------------------------------------------------------
-        # Operator of assigning value '=' y 'return' in the function
-        if (j.find('=')!=-1):
-            posi=j.find('=') 
-            antes_de_char=j[:posi]
-            despues_de_char=j[posi:].removeprefix('=')
-            despues_de_char=despues_de_char.strip() 
-            dict_code[Fun_key][despues_de_char.strip()]=str(nL)+"#"+j[:posi].strip()# Key's in a dict must be unique 
+        #return-----------------------------------------------------------------------------------------------
         if (j.find('return')!=-1):
             posi=j.find('return')
             despues_de_char=j[posi:].removeprefix('return')
             despues_de_char=despues_de_char.strip() 
             dict_code[Fun_key]['return']=str(nL)+"#"+despues_de_char.strip()# Key's in a dict must be unique
+        #return----------------------------------------------------------------------------------------------
         #variables decalradas dentro de la funcion-----------------------------------------------------------
         if (j.find('int')!=-1 or j.find('float')!=-1 or j.find('string')!=-1):
             if (j.find('=')!=-1):
@@ -143,8 +138,15 @@ for j in LineaXLinea:
                 j=j.removeprefix('=')
             j=j.split(' ')
             dict_code[Fun_key][j[1]]=str(nL)+"#"+j[0]
-
         #variables decalradas dentro de la funcion-----------------------------------------------------------
+        # Operator of assigning value '=' y 'return' in the function
+        elif (j.find('=')!=-1):
+            posi=j.find('=') 
+            antes_de_char=j[:posi]
+            despues_de_char=j[posi:].removeprefix('=')
+            despues_de_char=despues_de_char.strip() 
+            dict_code[Fun_key][despues_de_char.strip()]=str(nL)+"#"+j[:posi].strip()# Key's in a dict must be unique 
+
 
     # Note: the next 'if' will only check for a function because...
     # because we will never going to find the key word='if' out of a function     
@@ -238,6 +240,9 @@ for j in dict_code:
                     print()
             if(fj=='return'):
                varReturn=dict_code[j][fj]
+            if ( ((dict_code[j][fj]).split('#'))[0]!= (j.split('#'))[0]):
+                if( ((dict_code[j][fj]).split('#'))[1].find('float')!=-1):#errores de locales
+                    print("Se encontro un var float")
     else:
         #errores de globales
         print()
