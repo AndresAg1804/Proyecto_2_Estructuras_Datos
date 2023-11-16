@@ -238,12 +238,14 @@ for j in dict_code:
                     print()
             elif(fj=='return'):
                varReturn=dict_code[j][fj]
+
             elif ( ((dict_code[j][fj]).split('#'))[0]!= numLF[0]):
                 if( ((dict_code[j][fj]).split('#'))[1].find('float')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('int')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('string')!=-1):#errores de locales
                     print("Se encontro un var float")#'y': '3#float'
                 else:
                     print()
-                    # operaciones de asignacion  
+                    # operaciones de asignacion        
+                    
     else:
         print()
         #errores de globales
