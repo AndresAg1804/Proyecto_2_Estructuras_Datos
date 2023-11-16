@@ -240,6 +240,7 @@ for j in dict_code:
                     print()
             if(fj=='return'):
                varReturn=dict_code[j][fj]
+               print(varReturn)
             if ( ((dict_code[j][fj]).split('#'))[0]!= (j.split('#'))[0]):
                 if( ((dict_code[j][fj]).split('#'))[1].find('float')!=-1):#errores de locales
                     print("Se encontro un var float")
