@@ -200,8 +200,6 @@ list_de_errores=[]
 for j in dict_code:
     if (j.find('int')!=-1 or j.find('string')!=-1 or j.find('float')!=-1 or j.find('void')!=-1):
         numLF=j.split('#')
-        print(numLF[0])
-        print(numLF[1])
         for fj in dict_code[j]:#vaya iterando por todas las llaves del dict interno
             if(fj=="if" or fj=="while"):
                 numeroLinea=dict_code[j][fj].split("#")
@@ -238,18 +236,24 @@ for j in dict_code:
                     print()
                 elif(c4CUATRO!=None ):#encontro local
                     print()
-            if(fj=='return'):
+            elif(fj=='return'):
                varReturn=dict_code[j][fj]
-            if ( ((dict_code[j][fj]).split('#'))[0]!= (j.split('#'))[0]):
-                if( ((dict_code[j][fj]).split('#'))[1].find('float')!=-1):#errores de locales
-                    print("Se encontro un var float")
+            elif ( ((dict_code[j][fj]).split('#'))[0]!= numLF[0]):
+                if( ((dict_code[j][fj]).split('#'))[1].find('float')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('int')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('string')!=-1):#errores de locales
+                    print("Se encontro un var float")#'y': '3#float'
+                else:
+                    print()
+                    # operaciones de asignacion  
     else:
-        #errores de globales
         print()
+        #errores de globales
 
 
 print("-----------------------------------Diccionario Principal del Codigo---------------------------------------")
 pprint(dict_code)
+print("----------------------------------------------------------------------------------------------------------")
+print("-------------------------------------------Lista de Errores-----------------------------------------------")
+pprint(list_de_errores)
 print("----------------------------------------------------------------------------------------------------------")
 
 '''
