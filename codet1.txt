@@ -1,7 +1,7 @@
 int x
 int funcion(float v, string n){
 float y=10
- if (v > 0.0){
+ if (v > n){
  n = “Mayor”
  x = x + 5
  }

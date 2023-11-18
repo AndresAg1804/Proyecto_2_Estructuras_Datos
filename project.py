@@ -19,15 +19,16 @@ dict_ERRORES = {
 }
 #---------------------------------Error Class----------------------------------------------
 class Error:
-    def __init__(self,nl="",e=-1):
-        self.nl=nl
-        self.codeError=e
+    def __init__(self, nul='', er=-1):
+        self.nl=nul
+        self.codeError = er
     def get_string2lookUP(self):
         return self.nl
     def get_codeError(self):
-        return self.e
+        return self.codeError
     def toString(self):
-        print(f"ERROR: Linea: #"+{nL}+" Tipo de Error: ["+{dict_ERRORES.get(self.e,"that error code# is not in [dict_ERRORES]")}+"]")
+        error_type = dict_ERRORES.get(self.codeError, "that error code is not in dict_ERRORES")
+        print(f"ERROR: Linea: #{str(self.nl)} Tipo de Error: [{error_type}]")
 #---------------------------------Error Class----------------------------------------------
 
     #nota: how can I get the dict value with out a KeyError: 
@@ -225,13 +226,25 @@ for j in dict_code:
                     c1UNO=c1UNO.split("#")
                     c2DOS=c2DOS.split("#")
                     if(c1UNO[1]=='string' and c2DOS[1]!='string'):
-                        list_de_errores.append(Error(numeroLinea[0],0))
+                        list_de_errores.append(Error(numeroLinea[0],2))
                     elif(c2DOS[1]=='string' and c1UNO[1]!='string'):
-                        list_de_errores.append(Error(numeroLinea[0],0))
+                        list_de_errores.append(Error(numeroLinea[0],2))
+
                 elif (c1UNO!=None and c4CUATRO!=None):
-                    print()
+                    c4CUATRO=c4CUATRO.split("#")
+                    c1UNO=c1UNO.split("#")
+                    if(c1UNO[1]=='string' and c4CUATRO[1]!='string'):
+                        list_de_errores.append(Error(numeroLinea[0],2))
+                    elif(c4CUATRO[1]=='string' and c1UNO[1]!='string'):
+                        list_de_errores.append(Error(numeroLinea[0],2))
+                    
                 elif (c2DOS!=None and c3TRES!=None):
-                    print()
+                    c3TRES=c3TRES.split("#")
+                    c2DOS=c2DOS.split("#")
+                    if(c3TRES[1]=='string' and c2DOS[1]!='string'):
+                        list_de_errores.append(Error(numeroLinea[0],2))
+                    elif(c2DOS[1]=='string' and c3TRES[1]!='string'):
+                        list_de_errores.append(Error(numeroLinea[0],2))
                 elif (c4CUATRO!=None and c3TRES!=None):
                     c4CUATRO=c4CUATRO.split("#")
                     c3TRES=c3TRES.split("#")
@@ -272,6 +285,7 @@ pprint(dict_code)
 print("----------------------------------------------------------------------------------------------------------")
 print("-------------------------------------------Lista de Errores-----------------------------------------------")
 pprint(list_de_errores)
+list_de_errores[0].toString()
 print("----------------------------------------------------------------------------------------------------------")
 
 '''
