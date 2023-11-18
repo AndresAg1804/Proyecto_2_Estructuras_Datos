@@ -295,8 +295,25 @@ for j in dict_code:
                     variable_asignada=dict_de_funci.get(numeroLinea[1],None)
                     if(variable_asignada!=None):#ANALISIS de asigncion a una variable local
                         print("ANALISIS de asigncion a una variable local")
+                        variable_asignada=(variable_asignada.split("#"))[1]
+                        posi=variable_asignada.find("_")
+                        if(posi!=-1):
+                            variable_asignada=variable_asignada[:posi]
+                            variable_asignada=variable_asignada.removeprefix('_')
+
+                        print(variable_asignada)
+                        print(fj)
                     elif(dict_code.get(numeroLinea[1],None)!=None):#ANALISIS de asigncion a una variable global
                         print("ANALISIS de asigncion a una variable global")
+                        variable_asignada=dict_code.get(numeroLinea[1],None)
+                        variable_asignada=(variable_asignada.split("#"))[1]
+                        posi=variable_asignada.find("_")
+                        if(posi!=-1):
+                            variable_asignada=variable_asignada[:posi]
+                            variable_asignada=variable_asignada.removeprefix('_')
+                            
+                        print(variable_asignada)
+                        print(fj)
                     else:
                         list_de_errores.append(Error(numeroLinea[0],5))
                     #list_de_errores.append(Error(numeroLinea[0],1))
