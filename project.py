@@ -14,12 +14,12 @@ for i in content2:
 dict_ERRORES = {
     0: 'valor de retorno invalido',
     1: 'asignacion de valor invalida hacia una variable', 
-    2: 'comparacion invalida con string en condicional ',
+    2: 'comparacion invalida de tipo de variable en condicional ',
     3: 'valor de retorno invalido'
 }
 #---------------------------------Error Class----------------------------------------------
 class Error:
-    def _init_(self,nl="",e=-1):
+    def __init__(self,nl="",e=-1):
         self.nl=nl
         self.codeError=e
     def get_string2lookUP(self):
@@ -134,10 +134,14 @@ for j in LineaXLinea:
         if (j.find('int')!=-1 or j.find('float')!=-1 or j.find('string')!=-1):
             if (j.find('=')!=-1):
                 posi=j.find('=')
+                valor=j[posi:]
                 j=j[:posi]
                 j=j.removeprefix('=')
-            j=j.split(' ')
-            dict_code[Fun_key][j[1]]=str(nL)+"#"+j[0]
+                j=j.split(' ')
+                dict_code[Fun_key][j[1]]=str(nL)+"#"+j[0]+"_"+valor.removeprefix('=')
+            else:
+                j=j.split(' ')
+                dict_code[j[1]]=str(nL)+"#"+j[0]
         #variables decalradas dentro de la funcion-----------------------------------------------------------
         # Operator of assigning value '=' y 'return' in the function
         elif (j.find('=')!=-1):
@@ -189,11 +193,18 @@ for j in LineaXLinea:
     if(InFUN==False):
         if (j.find('int')!=-1 or j.find('float')!=-1 or j.find('string')!=-1):
             if (j.find('=')!=-1):
-                posi=j.find('=')    #int x=40
+                posi=j.find('=') 
+                valor=j[posi:]   #int x=40
                 j=j[:posi]
                 j=j.removeprefix('=')
-            j=j.split(' ')
-            dict_code[j[1]]=str(nL)+"#"+j[0]
+                j=j.split(' ')
+                dict_code[j[1]]=str(nL)+"#"+j[0]+"_"+valor.removeprefix('=')
+            else:
+                 j=j.split(' ')
+                 dict_code[j[1]]=str(nL)+"#"+j[0]
+                
+
+            
     nL=nL+1
 #for para leer errors   
 list_de_errores=[]
@@ -241,7 +252,7 @@ for j in dict_code:
 
             elif ( ((dict_code[j][fj]).split('#'))[0]!= numLF[0]):
                 if( ((dict_code[j][fj]).split('#'))[1].find('float')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('int')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('string')!=-1):#errores de locales
-                    print("Se encontro un var float")#'y': '3#float'
+                    print((dict_code[j][fj]))
                 else:
                     print()
                     # operaciones de asignacion        
