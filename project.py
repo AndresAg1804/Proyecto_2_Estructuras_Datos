@@ -12,10 +12,10 @@ for i in content2:
     LineaXLinea.append(i)
 
 dict_ERRORES = {
-    0: 'valor de retorno invalido',
+    0: 'valor de retorno invalido(no existe la variable en el diccionario)',
     1: 'asignacion de valor invalida hacia una variable', 
     2: 'comparacion invalida con string en condicional ',
-    3: 'valor de retorno invalido'
+    3: 'valor de retorno invalido(El tipo de retorno no coincide con el tipo de la funcion)'
 }
 #---------------------------------Error Class----------------------------------------------
 class Error:
@@ -42,6 +42,7 @@ dict_code={}
 Fun_key=''
 InFUN=False
 nL=1
+tipoFun=''
 for j in LineaXLinea:
     #function key = Fun_key
     # if the varible 'INFUN'==Treu we are in a function so we will add values to... 
@@ -159,6 +160,8 @@ for j in LineaXLinea:
             posi=j.find(' ')
             #Function key
             Fun_key=str(nL)+"#"+j[:posi].strip()
+            tipoFun=j[:posi].strip()
+            print(tipoFun)
             dict_code[Fun_key]={}#DONE whith the return value, adding a new inner dictionary
             #adding varibles to the new inner dictionary:
             posi = j.find('{')
@@ -249,8 +252,32 @@ for j in dict_code:
                     print()
                 elif(c4CUATRO!=None ):#encontro local
                     print()
-            elif(fj=='return'):
-               varReturn=dict_code[j][fj]
+            elif fj == 'return':
+             varReturn = dict_code[j][fj].split("#")
+             numLF[0] = varReturn[0]
+             print(numLF[0])
+    
+             # Obtén el nombre de la variable o el tipo de retorno de la función
+             cod = varReturn[1]
+             print(cod)
+             
+             # Verifica si la variable de retorno existe en el diccionario
+             if cod in dict_code[j]:
+                cod_value = dict_code[j][cod].split("#")
+                print("hola")
+                print(f"Definición de {cod_value[0]}: {cod_value[1]}")
+
+             # Compara el tipo de retorno con el tipo especificado al declarar la función
+                if cod_value[1] != tipoFun:
+                 list_de_errores.append(Error(numLF[0], 3))
+             else:
+               if cod in dict_code:
+                 cod_value = dict_code[cod].split("#")
+                 print(f"Definición de {cod_value[0]}: {cod_value[1]}")
+                 if cod_value[1] != tipoFun:
+                   list_de_errores.append(Error(numLF[0], 3))
+               else:
+                    list_de_errores.append(Error(numLF[0], 0))   
 
             elif ( ((dict_code[j][fj]).split('#'))[0]!= numLF[0]):
                 if( ((dict_code[j][fj]).split('#'))[1].find('float')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('int')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('string')!=-1):#errores de locales
@@ -268,8 +295,8 @@ print("-----------------------------------Diccionario Principal del Codigo------
 pprint(dict_code)
 print("----------------------------------------------------------------------------------------------------------")
 print("-------------------------------------------Lista de Errores-----------------------------------------------")
-pprint(list_de_errores)
-list_de_errores[0].toString()
+for i in list_de_errores:
+    print(i.toString())
 print("----------------------------------------------------------------------------------------------------------")
 
 '''
@@ -286,3 +313,30 @@ int funcion(float v, string n){
 
  -------------------------------------------------------
 '''
+
+def obtener_variables_expresion(expresion):
+    # Operadores a considerar
+    operadores = ['+', '-', '*', '/']
+
+    # Eliminar espacios en blanco y dividir la expresión
+    partes = expresion.replace(' ', '').split('+')
+
+    # Variables extraídas
+    variables = set()
+
+    # Iterar sobre las partes y buscar variables
+    for parte in partes:
+        for operador in operadores:
+            if operador in parte:
+                variables.update(parte.split(operador))
+                break
+        else:
+            # Si no se encuentra ningún operador, consideramos toda la parte como una variable
+            variables.add(parte)
+
+    return list(variables)
+
+# Ejemplo de uso:
+expresion = 'n*5 + x / y - z'
+variables = obtener_variables_expresion(expresion)
+print(f'Variables en la expresión "{expresion}": {variables}')
