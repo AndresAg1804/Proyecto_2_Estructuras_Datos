@@ -252,7 +252,12 @@ for j in dict_code:
 
             elif ( ((dict_code[j][fj]).split('#'))[0]!= numLF[0]):
                 if( ((dict_code[j][fj]).split('#'))[1].find('float')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('int')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('string')!=-1):#errores de locales
-                    print((dict_code[j][fj]))
+                    if(((dict_code[j][fj]).split('#'))[1].find('float')!=-1 ):
+                        print()
+                    elif(((dict_code[j][fj]).split('#'))[1].find('int')!=-1 ):
+                        print()
+                    else:
+                        print()
                 else:
                     print()
                     # operaciones de asignacion        
