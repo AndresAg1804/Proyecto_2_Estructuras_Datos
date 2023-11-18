@@ -1,6 +1,6 @@
-int x = 40
+float x=0.0
 int funcion(float v, string n){
-float y=10
+string y="juan"
  if (v > n){
  n = “Mayor”
  x = x + 5
