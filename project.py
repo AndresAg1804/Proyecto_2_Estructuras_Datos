@@ -15,7 +15,9 @@ dict_ERRORES = {
     0: 'valor de retorno invalido',
     1: 'asignacion de valor invalida hacia una variable', 
     2: 'comparacion invalida de tipo de variable en condicional ',
-    3: 'valor de retorno invalido'
+    3: 'valor de retorno invalido',
+    4: 'asignacion de valor invalida hacia una variable Global', 
+    5: 'variable no decalrda' 
 }
 #---------------------------------Error Class----------------------------------------------
 class Error:
@@ -266,26 +268,72 @@ for j in dict_code:
             elif ( ((dict_code[j][fj]).split('#'))[0]!= numLF[0]):
                 if( ((dict_code[j][fj]).split('#'))[1].find('float')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('int')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('string')!=-1):#errores de locales
                     if(((dict_code[j][fj]).split('#'))[1].find('float')!=-1 ):
-                        print()
+                        numeroLinea=dict_code[j][fj].split("#")
+                        tipoYvalor=numeroLinea[1].split('_')
+                        try:
+                            sera_float_value = float(tipoYvalor[1])
+                        except ValueError:
+                            list_de_errores.append(Error(numeroLinea[0],1))
                     elif(((dict_code[j][fj]).split('#'))[1].find('int')!=-1 ):
-                        print()
+                        numeroLinea=dict_code[j][fj].split("#")
+                        tipoYvalor=numeroLinea[1].split('_')
+                        if(tipoYvalor[1].isdecimal()!=True):
+                            list_de_errores.append(Error(numeroLinea[0],1))
                     else:
-                        print()
+                        numeroLinea=dict_code[j][fj].split("#")
+                        tipoYvalor=numeroLinea[1].split('_')
+                        single_quotes = ''+tipoYvalor[1]+''
+                        if '\"' in single_quotes:
+                            None
+                        else:
+                            list_de_errores.append(Error(numeroLinea[0],1))
                 else:
                     print()
+                    numeroLinea=dict_code[j][fj].split("#")
+
+                    dict_de_funci=dict_code.get(j,None)
+                    variable_asignada=dict_de_funci.get(numeroLinea[1],None)
+                    if(variable_asignada!=None):#ANALISIS de asigncion a una variable local
+                        print("ANALISIS de asigncion a una variable local")
+                    elif(dict_code.get(numeroLinea[1],None)!=None):#ANALISIS de asigncion a una variable global
+                        print("ANALISIS de asigncion a una variable global")
+                    else:
+                        list_de_errores.append(Error(numeroLinea[0],5))
+                    #list_de_errores.append(Error(numeroLinea[0],1))
                     # operaciones de asignacion        
                     
-    else:
-        print()
-        #errores de globales
+    else:#errores de globales
+        numLF=((dict_code[j]).split('#'))[0]
+        a=((dict_code[j]).split('#'))[1]
+
+        if(a.find('float')!=-1 and a.find('_')!=-1):
+            tipoYvalor=a.split('_')
+            try:
+                sera_float_value = float(tipoYvalor[1])
+            except ValueError:
+                list_de_errores.append(Error(numLF,4))
+
+        elif(a.find('int')!=-1 and a.find('_')!=-1):
+            tipoYvalor=a.split('_')
+            if(tipoYvalor[1].isdecimal()!=True):
+                list_de_errores.append(Error(numLF,4))
+
+        elif (a.find('_')!=-1):
+            tipoYvalor=a.split('_')
+            single_quotes = ''+tipoYvalor[1]+''
+            if '\"' in single_quotes:
+                None
+            else:
+                list_de_errores.append(Error(numLF,4))
+
 
 
 print("-----------------------------------Diccionario Principal del Codigo---------------------------------------")
 pprint(dict_code)
 print("----------------------------------------------------------------------------------------------------------")
 print("-------------------------------------------Lista de Errores-----------------------------------------------")
-pprint(list_de_errores)
-list_de_errores[0].toString()
+for i in range(0,len(list_de_errores)):
+    list_de_errores[i].toString()
 print("----------------------------------------------------------------------------------------------------------")
 
 '''
