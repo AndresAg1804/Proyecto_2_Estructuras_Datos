@@ -18,7 +18,7 @@ dict_ERRORES = {
     3: 'valor de retorno invalido'
 }
 #---------------------------------Error Class----------------------------------------------
-class Errorr:
+class Error:
     def __init__(self, nul='', er=-1):
         self.nl=nul
         self.codeError = er
@@ -215,36 +215,33 @@ for j in dict_code:
                     c1UNO=c1UNO.split("#")
                     c2DOS=c2DOS.split("#")
                     if(c1UNO[1]=='string' and c2DOS[1]!='string'):
-                        list_de_errores.append(Errorr(numeroLinea[0],2))
+                        list_de_errores.append(Error(numeroLinea[0],2))
                     elif(c2DOS[1]=='string' and c1UNO[1]!='string'):
-                        list_de_errores.append(Errorr(numeroLinea[0],2))
+                        list_de_errores.append(Error(numeroLinea[0],2))
 
                 elif (c1UNO!=None and c4CUATRO!=None):
                     c4CUATRO=c4CUATRO.split("#")
                     c1UNO=c1UNO.split("#")
                     if(c1UNO[1]=='string' and c4CUATRO[1]!='string'):
-                        list_de_errores.append(Errorr(numeroLinea[0],2))
+                        list_de_errores.append(Error(numeroLinea[0],2))
                     elif(c4CUATRO[1]=='string' and c1UNO[1]!='string'):
-                        list_de_errores.append(Errorr(numeroLinea[0],2))
+                        list_de_errores.append(Error(numeroLinea[0],2))
                     
                 elif (c2DOS!=None and c3TRES!=None):
                     c3TRES=c3TRES.split("#")
                     c2DOS=c2DOS.split("#")
                     if(c3TRES[1]=='string' and c2DOS[1]!='string'):
-                        list_de_errores.append(Errorr(numeroLinea[0],2))
+                        list_de_errores.append(Error(numeroLinea[0],2))
                     elif(c2DOS[1]=='string' and c3TRES[1]!='string'):
-                        list_de_errores.append(Errorr(numeroLinea[0],2))
+                        list_de_errores.append(Error(numeroLinea[0],2))
                 elif (c4CUATRO!=None and c3TRES!=None):
                     c4CUATRO=c4CUATRO.split("#")
                     c3TRES=c3TRES.split("#")
                     if(c3TRES[1]=='string' and c4CUATRO[1]!='string'):
-                        list_de_errores.append(Errorr(numeroLinea[0],2))
+                        list_de_errores.append(Error(numeroLinea[0],2))
                     elif(c4CUATRO[1]=='string' and c3TRES[1]!='string'):
-                        list_de_errores.append(Errorr(numeroLinea[0],2))
+                        list_de_errores.append(Error(numeroLinea[0],2))
                 elif(c1UNO!=None):#encontro global
-                    # c1UNO=c1UNO.split("#")
-                    # if(c1UNO[1]=='string' and c4CUATRO[1]!='string'):
-                    #     list_de_errores.append(Error(numeroLinea[0],2))
                     print()
                 elif(c2DOS!=None ):#encontro global
                     print()
