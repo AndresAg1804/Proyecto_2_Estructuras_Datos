@@ -277,7 +277,6 @@ for j in dict_code:
              # Verifica si la variable de retorno existe en el diccionario
              if cod in dict_code[j]:
                 cod_value = dict_code[j][cod].split("#")
-                print("hola")
                 print(f"Definición de {cod_value[0]}: {cod_value[1]}")
 
              # Compara el tipo de retorno con el tipo especificado al declarar la función
@@ -286,8 +285,9 @@ for j in dict_code:
              else:
                if cod in dict_code:
                  cod_value = dict_code[cod].split("#")
-                 print(f"Definición de {cod_value[0]}: {cod_value[1]}")
-                 if cod_value[1] != tipoFun:
+                 cod_valueOriginal = cod_value[1].split("_")
+                 print(f"Definición de {cod_value[0]}: {cod_valueOriginal[0]}")
+                 if cod_valueOriginal[0] != tipoFun:
                    list_de_errores.append(Error(numLF[0], 3))
                else:
                     list_de_errores.append(Error(numLF[0], 0))   
