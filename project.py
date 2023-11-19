@@ -354,7 +354,7 @@ for j in dict_code:
                                     check4H_fun=(check4H_fun.split('_'))[0]
                                     if variable_asignada!=check4H_fun:
                                         list_de_errores.append(Error(numeroLinea[0],1))
-                                elif(c!="+"or c!="-"or c!="/"or c!="%"):
+                                elif c!=' 'and (c!="+" and c!="-"and c!="/"and c!="%"):
                                     print("okay--------")
                                     if(variable_asignada=='float'):
                                         try:
@@ -428,7 +428,7 @@ for j in dict_code:
                                     check4H_fun=(check4H_fun.split('_'))[0]
                                     if variable_asignada!=check4H_fun:
                                         list_de_errores.append(Error(numeroLinea[0],4))
-                                elif (c!="+"or c!="-"or c!="/"or c!="%"):
+                                elif c!=' 'and (c!="+" and c!="-"and c!="/"and c!="%"):
                                     print("okay--------")
                                     if(variable_asignada=='float'):
                                         try:
@@ -445,15 +445,16 @@ for j in dict_code:
                                         else:
                                             list_de_errores.append(Error(numeroLinea[0],4))
                         else:
+                            #ver si le estoy asignando una variable a otra
                             check4H=dict_code.get(fj,None)
                             check4H_in_fun=dict_de_funci.get(fj,None)
 
-                            if check4H !=None:
+                            if check4H !=None and  (check4H.find('string')!=-1 or check4H.find('float')!=-1 or check4H.find('int')!=-1):
                                 check4H=(check4H.split('#'))[1]
                                 check4H=(check4H.split('_'))[0]
                                 if variable_asignada!=check4H:
                                         list_de_errores.append(Error(numeroLinea[0],4))
-                            elif check4H_in_fun !=None:
+                            elif check4H_in_fun !=None and (check4H_in_fun.find('string')!=-1 or check4H_in_fun.find('float')!=-1 or check4H_in_fun.find('int')!=-1):
                                 check4H_in_fun=(check4H_in_fun.split('#'))[1]
                                 check4H_in_fun=(check4H_in_fun.split('_'))[0]
                                 if variable_asignada!=check4H_in_fun:
