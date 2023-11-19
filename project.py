@@ -273,7 +273,24 @@ for j in dict_code:
              # Obtén el nombre de la variable o el tipo de retorno de la función
              cod = varReturn[1]
              print(cod)
-             
+             if tipoFun =="string":
+                single_quotes = ''+cod+''
+                if '\"' in single_quotes:
+                    None
+                else:
+                    list_de_errores.append(Error(numLF[0],3))
+             elif tipoFun =="float":
+                 try:
+                    cod = float(cod[1])
+                 except ValueError:
+                    list_de_errores.append(Error(numLF[0],3))
+
+             elif tipoFun =="int":
+                 if(cod.isdecimal()!=True):
+                    list_de_errores.append(Error(numLF[0],3))
+             else:
+                 list_de_errores.append(Error(numLF[0], 0))
+
              # Verifica si la variable de retorno existe en el diccionario
              if cod in dict_code[j]:
                 cod_value = dict_code[j][cod].split("#")
@@ -290,7 +307,24 @@ for j in dict_code:
                  if cod_valueOriginal[0] != tipoFun:
                    list_de_errores.append(Error(numLF[0], 3))
                else:
-                    list_de_errores.append(Error(numLF[0], 0))   
+                    print("aqui")
+                    if tipoFun =="string":
+                        single_quotes = ''+cod+''
+                        if '\"' in single_quotes:
+                            None
+                        else:
+                            list_de_errores.append(Error(numLF[0],3))
+                    elif tipoFun =="float":
+                        print("aqui_float")
+                        try:
+                            cod = float(cod)
+                        except ValueError:
+                            print()
+                            list_de_errores.append(Error(numLF[0],3))
+
+                    elif tipoFun =="int":
+                        if(cod.isdecimal()!=True):
+                            list_de_errores.append(Error(numLF[0],3)) 
 
             elif ( ((dict_code[j][fj]).split('#'))[0]!= numLF[0]):
                 if( ((dict_code[j][fj]).split('#'))[1].find('float')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('int')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('string')!=-1):#errores de locales

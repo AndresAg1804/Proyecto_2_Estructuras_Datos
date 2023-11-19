@@ -1,9 +1,10 @@
 float x=0.0
-int funcion(float v, string n){
+
+float funcion(float v, string n){
 string y="juan"
  if (v > n){
- n = “Mayor”
+ n = Mayor
  x = x + 5
  }
- return n
+ return 0.0
  }
