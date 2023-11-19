@@ -268,15 +268,12 @@ for j in dict_code:
             elif fj == 'return':
              varReturn = dict_code[j][fj].split("#")
              numLF[0] = varReturn[0]
-             print(numLF[0])
     
              # Obtén el nombre de la variable o el tipo de retorno de la función
              cod = varReturn[1]
-             print(cod)
              # Verifica si la variable de retorno existe en el diccionario
              if cod in dict_code[j]:
                 cod_value = dict_code[j][cod].split("#")
-                print(f"Definición de {cod_value[0]}: {cod_value[1]}")
 
              # Compara el tipo de retorno con el tipo especificado al declarar la función
                 if cod_value[1] != tipoFun:
@@ -285,7 +282,6 @@ for j in dict_code:
                if cod in dict_code:
                  cod_value = dict_code[cod].split("#")
                  cod_valueOriginal = cod_value[1].split("_")
-                 print(f"Definición de {cod_value[0]}: {cod_valueOriginal[0]}")
                  if cod_valueOriginal[0] != tipoFun:
                    list_de_errores.append(Error(numLF[0], 3))
                else:
@@ -296,11 +292,10 @@ for j in dict_code:
                         else:
                             list_de_errores.append(Error(numLF[0],3))
                     elif tipoFun =="float":
-                        print("aqui_float")
+                        
                         try:
                             cod = float(cod)
                         except ValueError:
-                            print()
                             list_de_errores.append(Error(numLF[0],3))
 
                     elif tipoFun =="int":
@@ -345,7 +340,70 @@ for j in dict_code:
 
                         print(variable_asignada)
                         print(fj)
+                        if (fj.find('+')!=-1) or (fj.find('-')!=-1) or (fj.find('/')!=-1) or (fj.find('%')!=-1):
+                            for c in fj:
+                                check4H=dict_code.get(c,None)
+                                check4H_fun=dict_de_funci.get(c,None)
+                                if check4H != None:
+                                    check4H=(check4H.split('#'))[1]
+                                    check4H=(check4H.split('_'))[0]
+                                    if variable_asignada!=check4H:
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+                                elif check4H_fun != None:
+                                    check4H_fun=(check4H_fun.split('#'))[1]
+                                    check4H_fun=(check4H_fun.split('_'))[0]
+                                    if variable_asignada!=check4H_fun:
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+                                elif(c!="+"or c!="-"or c!="/"or c!="%"):
+                                    print("okay--------")
+                                    if(variable_asignada=='float'):
+                                        try:
+                                            sera_float_value = float(c)
+                                        except ValueError:
+                                            list_de_errores.append(Error(numeroLinea[0],1))
+                                    elif(variable_asignada=='int'):
+                                        if(c.isdecimal()!=True):
+                                            list_de_errores.append(Error(numeroLinea[0],1))
+                                    else:
+                                        single_quotes = ''+c+''
+                                        if '\"' in single_quotes:
+                                            None
+                                        else:
+                                            list_de_errores.append(Error(numeroLinea[0],1))
+
+                        else:
+                            check4H=dict_code.get(fj,None)
+                            check4H_in_fun=dict_de_funci.get(fj,None)
+
+                            if check4H !=None:
+                                check4H=(check4H.split('#'))[1]
+                                check4H=(check4H.split('_'))[0]
+                                if variable_asignada!=check4H:
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+                            elif check4H_in_fun !=None:
+                                check4H_in_fun=(check4H_in_fun.split('#'))[1]
+                                check4H_in_fun=(check4H_in_fun.split('_'))[0]
+                                if variable_asignada!=check4H_in_fun:
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+                            else:
+                                print("a individual")
+                                if(variable_asignada=='float'):
+                                    try:
+                                        sera_float_value = float(fj)
+                                    except ValueError:
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+                                elif(variable_asignada=='int'):
+                                    if(fj.isdecimal()!=True):
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+                                else:
+                                    single_quotes = ''+fj+''
+                                    if '\"' in single_quotes:
+                                        None
+                                    else:
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+
                     elif(dict_code.get(numeroLinea[1],None)!=None):#ANALISIS de asigncion a una variable global
+                        
                         print("ANALISIS de asigncion a una variable global")
                         variable_asignada=dict_code.get(numeroLinea[1],None)
                         variable_asignada=(variable_asignada.split("#"))[1]
@@ -356,6 +414,68 @@ for j in dict_code:
                             
                         print(variable_asignada)
                         print(fj)
+                        if (fj.find('+')!=-1) or (fj.find('-')!=-1) or (fj.find('/')!=-1) or (fj.find('%')!=-1):
+                            for c in fj:
+                                check4H=dict_code.get(c,None)
+                                check4H_fun=dict_de_funci.get(c,None)
+                                if check4H != None:
+                                    check4H=(check4H.split('#'))[1]
+                                    check4H=(check4H.split('_'))[0]
+                                    if variable_asignada!=check4H:
+                                        list_de_errores.append(Error(numeroLinea[0],4))
+                                elif check4H_fun != None:
+                                    check4H_fun=(check4H_fun.split('#'))[1]
+                                    check4H_fun=(check4H_fun.split('_'))[0]
+                                    if variable_asignada!=check4H_fun:
+                                        list_de_errores.append(Error(numeroLinea[0],4))
+                                elif (c!="+"or c!="-"or c!="/"or c!="%"):
+                                    print("okay--------")
+                                    if(variable_asignada=='float'):
+                                        try:
+                                            sera_float_value = float(c)
+                                        except ValueError:
+                                            list_de_errores.append(Error(numeroLinea[0],4))
+                                    elif(variable_asignada=='int'):
+                                        if(c.isdecimal()!=True):
+                                            list_de_errores.append(Error(numeroLinea[0],4))
+                                    else:
+                                        single_quotes = ''+c+''
+                                        if '\"' in single_quotes:
+                                            None
+                                        else:
+                                            list_de_errores.append(Error(numeroLinea[0],4))
+                        else:
+                            check4H=dict_code.get(fj,None)
+                            check4H_in_fun=dict_de_funci.get(fj,None)
+
+                            if check4H !=None:
+                                check4H=(check4H.split('#'))[1]
+                                check4H=(check4H.split('_'))[0]
+                                if variable_asignada!=check4H:
+                                        list_de_errores.append(Error(numeroLinea[0],4))
+                            elif check4H_in_fun !=None:
+                                check4H_in_fun=(check4H_in_fun.split('#'))[1]
+                                check4H_in_fun=(check4H_in_fun.split('_'))[0]
+                                if variable_asignada!=check4H_in_fun:
+                                        list_de_errores.append(Error(numeroLinea[0],4))
+                            else:
+                                print("a individual")
+                                if(variable_asignada=='float'):
+                                    try:
+                                        sera_float_value = float(fj)
+                                    except ValueError:
+                                        list_de_errores.append(Error(numeroLinea[0],4))
+                                elif(variable_asignada=='int'):
+                                    if(fj.isdecimal()!=True):
+                                        list_de_errores.append(Error(numeroLinea[0],4))
+                                else:
+                                    single_quotes = ''+fj+''
+                                    if '\"' in single_quotes:
+                                        None
+                                    else:
+                                        list_de_errores.append(Error(numeroLinea[0],4))                                
+
+
                     else:
                         list_de_errores.append(Error(numeroLinea[0],5))
                     #list_de_errores.append(Error(numeroLinea[0],1))
