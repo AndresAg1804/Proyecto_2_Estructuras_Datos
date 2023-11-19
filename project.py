@@ -235,6 +235,12 @@ for j in dict_code:
                 elif (c1UNO!=None and c4CUATRO!=None):
                     c4CUATRO=c4CUATRO.split("#")
                     c1UNO=c1UNO.split("#")
+                    if c4CUATRO[1].find('_')!=-1:
+                        c4CUATRO[1]=c4CUATRO[1].split('_')
+                        c4CUATRO[1]=c4CUATRO[1][0]
+                    if c1UNO[1].find('_')!=-1:
+                        c1UNO[1]=c1UNO[1].split('_')
+                        c1UNO[1]=c1UNO[1][0]
                     if(c1UNO[1]=='string' and c4CUATRO[1]!='string'):
                         list_de_errores.append(Error(numeroLinea[0],2))
                     elif(c4CUATRO[1]=='string' and c1UNO[1]!='string'):
@@ -243,6 +249,12 @@ for j in dict_code:
                 elif (c2DOS!=None and c3TRES!=None):
                     c3TRES=c3TRES.split("#")
                     c2DOS=c2DOS.split("#")
+                    if c3TRES[1].find('_')!=-1:
+                        c3TRES[1]=c3TRES[1].split('_')
+                        c3TRES[1]=c3TRES[1][0]
+                    if c2DOS[1].find('_')!=-1:
+                        c2DOS[1]=c2DOS[1].split('_')
+                        c2DOS[1]=c2DOS[1][0]
                     if(c3TRES[1]=='string' and c2DOS[1]!='string'):
                         list_de_errores.append(Error(numeroLinea[0],2))
                     elif(c2DOS[1]=='string' and c3TRES[1]!='string'):
@@ -250,16 +262,39 @@ for j in dict_code:
                 elif (c4CUATRO!=None and c3TRES!=None):
                     c4CUATRO=c4CUATRO.split("#")
                     c3TRES=c3TRES.split("#")
+                    if c4CUATRO[1].find('_')!=-1:
+                        c4CUATRO[1]=c4CUATRO[1].split('_')
+                        c4CUATRO[1]=c4CUATRO[1][0]
+                    if c3TRES[1].find('_')!=-1:
+                        c3TRES[1]=c3TRES[1].split('_')
+                        c3TRES[1]=c3TRES[1][0]
+
                     if(c3TRES[1]=='string' and c4CUATRO[1]!='string'):
                         list_de_errores.append(Error(numeroLinea[0],2))
                     elif(c4CUATRO[1]=='string' and c3TRES[1]!='string'):
                         list_de_errores.append(Error(numeroLinea[0],2))
                 elif(c1UNO!=None):#encontro global
-                    print()
+                    c1UNO=c1UNO.split("#")
+                    numeroLinea=dict_code[j][fj].split("#")
+                    analisisIF=numeroLinea[1].split('_')
+                    analisisIF[1].isdecimal()
+                    if c1UNO[1].find('_')!=-1:
+                        c1UNO[1]=c1UNO[1].split('_')
+                        c1UNO[1]=c1UNO[1][0]
+                    if analisisIF[1].isdecimal() == False and c1UNO[1]!='string':
+                        list_de_errores.append(Error(numeroLinea[0],2))
+                    elif(c1UNO[1]=='string' and analisisIF[1]!='string'):
+                        list_de_errores.append(Error(numeroLinea[0],2))
+
+                    # if(c3TRES[1]=='string' and c4CUATRO[1]!='string'):
+                    #     list_de_errores.append(Error(numeroLinea[0],2))
+                    # elif(c4CUATRO[1]=='string' and c3TRES[1]!='string'):
+                    #     list_de_errores.append(Error(numeroLinea[0],2))
                 elif(c2DOS!=None ):#encontro global
                     print()
                 elif(c3TRES!=None):#encontro local
-                    print()
+                    numeroLinea=dict_code[j][fj].split("#")
+                    tipoYvalor=numeroLinea[1].split('_')
                 elif(c4CUATRO!=None ):#encontro local
                     print()
             elif(fj=='return'):
@@ -288,7 +323,6 @@ for j in dict_code:
                         else:
                             list_de_errores.append(Error(numeroLinea[0],1))
                 else:
-                    print()
                     numeroLinea=dict_code[j][fj].split("#")
 
                     dict_de_funci=dict_code.get(j,None)

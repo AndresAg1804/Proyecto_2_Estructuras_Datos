@@ -1,7 +1,7 @@
 float x=0.0
 int funcion(float v, string n){
 string y="juan"
- if (v > n){
+ if (x > "123"){
  n = “Mayor”
  x = x + 5
  }
