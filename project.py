@@ -239,15 +239,18 @@ for j in dict_code:
                 Atributos:
                 numeroLinea = Lista que guarda el número de línea y sus parametros
                 aux = Lista que guarda los parametros de la función
+                c1UNO = Variable que guarda el valor de la la variable si es global, en caso de no ser, guarda None
+                c2DOS = Variable que guarda el valor de la la variable si es global, en caso de no ser, guarda None
+                c3TRES = Variable que guarda el valor de la la variable si es local, en caso de no ser, guarda None
+                c4CUATRO = Variable que guarda el valor de la la variable si es local, en caso de no ser, guarda None
+
+                Los if y elif que se desarrollan más adelante son la lógica que se implementó según el tipo de la variable (global o local) y sus combinaciones.
 
                 """
 
                 numeroLinea=dict_code[j][fj].split("#")
 
                 aux=numeroLinea[1].split("_")
-
-                print(aux[0])
-                print(aux[1])
 
                 c1UNO=dict_code.get(aux[0],None)
                 c2DOS=dict_code.get(aux[1],None)
@@ -353,13 +356,18 @@ for j in dict_code:
                     elif analisisIF[1].isdecimal() == True and c4CUATRO[1]=='string':
                         list_de_errores.append(Error(numeroLinea[0],2))
             elif fj == 'return':
-             """Caso de que la linea encuetre un "return"
+             
+             """
+             Caso de que la linea encuetre un "return"
 
-             Atributos:
+             Variables utilizadas:
              varReturn = Lista que guarda el número de linea y la variable de retorno de la función
              numLF = número de linea donde se encuentra el "return"
              cod = variable de retorno de la función
              cod_value = Lista que guarda el tipo de la variable y la variable
+             cod_ValueOriginal = Guarda el tipo de de la variable, para compararlo con tipoFun
+             tipoFun = Tipo de la función
+             single_quotes = Pequeño truco para saber si la variable es un string que viene encerrado en " "
              """
              varReturn = dict_code[j][fj].split("#")
              numLF[0] = varReturn[0]
@@ -376,8 +384,6 @@ for j in dict_code:
              else:
                if cod in dict_code:
                  cod_value = dict_code[cod].split("#")
-                 print(cod_value[0])
-                 print(cod_value[1])
                  cod_valueOriginal = cod_value[1].split("_")
                  if cod_valueOriginal[0] != tipoFun:
                    list_de_errores.append(Error(numLF[0], 3))
