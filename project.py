@@ -326,10 +326,18 @@ for j in dict_code:
                     elif analisisIF[1].isdecimal() == True and c4CUATRO[1]=='string':
                         list_de_errores.append(Error(numeroLinea[0],2))
             elif fj == 'return':
+             """Caso de que la linea encuetre un "return"
+
+             Atributos:
+             varReturn = Lista que guarda el número de linea y la variable de retorno de la función
+             numLF = número de linea donde se encuentra el "return"
+             cod = variable de retorno de la función
+             cod_value = Lista que guarda el tipo de la variable y la variable
+             """
              varReturn = dict_code[j][fj].split("#")
              numLF[0] = varReturn[0]
     
-             # Obtén el nombre de la variable o el tipo de retorno de la función
+             # nombre de la variable o el tipo de retorno de la función
              cod = varReturn[1]
              # Verifica si la variable de retorno existe en el diccionario
              if cod in dict_code[j]:
@@ -341,6 +349,8 @@ for j in dict_code:
              else:
                if cod in dict_code:
                  cod_value = dict_code[cod].split("#")
+                 print(cod_value[0])
+                 print(cod_value[1])
                  cod_valueOriginal = cod_value[1].split("_")
                  if cod_valueOriginal[0] != tipoFun:
                    list_de_errores.append(Error(numLF[0], 3))
