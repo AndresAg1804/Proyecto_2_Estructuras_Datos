@@ -33,20 +33,21 @@ class Error:
         print(f"ERROR: Linea: #{str(self.nl)} Tipo de Error: [{error_type}]")
 #---------------------------------Error Class----------------------------------------------
 def verificar_congruencia_de_tipo(tipo,linea):
-    if(tipo=='float'):
-        try:
-            sera_float_value = float(linea)
-        except ValueError:
-            list_de_errores.append(Error(numeroLinea[0],4))
-    elif(tipo=='int'):
-        if(linea.isdecimal()!=True):
-            list_de_errores.append(Error(numeroLinea[0],4))
-    else:
-        single_quotes = ''+linea+''
-        if '\"' in single_quotes:
-            None
+    if linea!='':
+        if(tipo=='float'):
+            try:
+                sera_float_value = float(linea)
+            except ValueError:
+                list_de_errores.append(Error(numeroLinea[0],4))
+        elif(tipo=='int'):
+            if(linea.isdecimal()!=True):
+                list_de_errores.append(Error(numeroLinea[0],4))
         else:
-            list_de_errores.append(Error(numeroLinea[0],4))
+            single_quotes = ''+linea+''
+            if '\"' in single_quotes:
+                None
+            else:
+                list_de_errores.append(Error(numeroLinea[0],4))
 
     #nota: how can I get the dict value with out a KeyError: 
     #like so...
@@ -436,27 +437,40 @@ for j in dict_code:
                         print(variable_asignada)
                         print(fj)
                         if (fj.find('+')!=-1) or (fj.find('-')!=-1) or (fj.find('/')!=-1) or (fj.find('%')!=-1) or (fj.find('*')!=-1):
+                            lisAUX=[]
                             for c in fj:
+                                '''
+                                check4H= Check for hashing
+                                check4H_fun= Check for hashing in funcion
+                                '''
                                 check4H=dict_code.get(c,None)
                                 check4H_fun=dict_de_funci.get(c,None)
+
                                 if check4H != None and  (check4H.find('string')!=-1 or check4H.find('float')!=-1 or check4H.find('int')!=-1):
                                     check4H=(check4H.split('#'))[1]
                                     check4H=(check4H.split('_'))[0]
+                                    lisAUX.append(c)
                                     if variable_asignada!=check4H:
                                         list_de_errores.append(Error(numeroLinea[0],1))
+
                                 elif check4H_fun != None  and (check4H_in_fun.find('string')!=-1 or check4H_in_fun.find('float')!=-1 or check4H_in_fun.find('int')!=-1):
                                     check4H_fun=(check4H_fun.split('#'))[1]
                                     check4H_fun=(check4H_fun.split('_'))[0]
+                                    lisAUX.append(c)
                                     if variable_asignada!=check4H_fun:
                                         list_de_errores.append(Error(numeroLinea[0],1))
                             ###################################################################
-                            fj=fj.replace('+','_')
-                            fj=fj.replace('/','_')
-                            fj=fj.replace('-','_')
-                            fj=fj.replace('%','_')
-                            fj=fj.replace('*','_')
-                            fj=fj.split('_')
-                            for i in fj:
+                            fjaux=fj
+                            for i in lisAUX:
+                                 fjaux=fjaux.removeprefix(i)
+
+                            fjaux=fjaux.replace('+','_')
+                            fjaux=fjaux.replace('/','_')
+                            fjaux=fjaux.replace('-','_')
+                            fjaux=fjaux.replace('%','_')
+                            fjaux=fjaux.replace('*','_')
+                            fjaux=fjaux.split('_')
+                            for i in fjaux:
                                 verificar_congruencia_de_tipo(variable_asignada,i)
                         else:
                             check4H=dict_code.get(fj,None)
@@ -502,27 +516,34 @@ for j in dict_code:
                         print(variable_asignada)
                         print(fj)
                         if (fj.find('+')!=-1) or (fj.find('-')!=-1) or (fj.find('/')!=-1) or (fj.find('%')!=-1 or (fj.find('*')!=-1)):
+                            lisAUX=[]
                             for c in fj:
                                 check4H=dict_code.get(c,None)
                                 check4H_fun=dict_de_funci.get(c,None)
                                 if check4H != None and  (check4H.find('string')!=-1 or check4H.find('float')!=-1 or check4H.find('int')!=-1):
                                     check4H=(check4H.split('#'))[1]
                                     check4H=(check4H.split('_'))[0]
+                                    lisAUX.append(c)
                                     if variable_asignada!=check4H:
                                         list_de_errores.append(Error(numeroLinea[0],4))
                                 elif check4H_fun != None  and (check4H_fun.find('string')!=-1 or check4H_fun.find('float')!=-1 or check4H_fun.find('int')!=-1):
                                     check4H_fun=(check4H_fun.split('#'))[1]
                                     check4H_fun=(check4H_fun.split('_'))[0]
+                                    lisAUX.append(c)
                                     if variable_asignada!=check4H_fun:
                                         list_de_errores.append(Error(numeroLinea[0],4))
                             ##########################################33
-                            fj=fj.replace('+','_')
-                            fj=fj.replace('/','_')
-                            fj=fj.replace('-','_')
-                            fj=fj.replace('%','_')
-                            fj=fj.replace('*','_')
-                            fj=fj.split('_')
-                            for i in fj:
+                            fjaux=fj
+                            for i in lisAUX:
+                                 fjaux=fjaux.replace(i,'')
+
+                            fjaux=fjaux.replace('+','_')
+                            fjaux=fjaux.replace('/','_')
+                            fjaux=fjaux.replace('-','_')
+                            fjaux=fjaux.replace('%','_')
+                            fjaux=fjaux.replace('*','_')
+                            fjaux=fjaux.split('_')
+                            for i in fjaux:
                                 verificar_congruencia_de_tipo(variable_asignada,i)
                         else:
                             #ver si le estoy asignando una variable a otra
