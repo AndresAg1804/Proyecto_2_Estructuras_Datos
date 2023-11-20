@@ -445,7 +445,7 @@ for j in dict_code:
                             list_de_errores.append(Error(numeroLinea[0],1))
                 else:
                     '''
-                    - Auqi van a llegar los casos que son de de asignacio '=' de X variable a Y variable
+                    - Aqui van a llegar los casos que son de de asignacio '=' de X variable a Y variable
                     en otras palabras donde aparecsa el '=' y no se este declarando una variable local de la funcion 
                     '''
                     numeroLinea=dict_code[j][fj].split("#")
@@ -475,7 +475,7 @@ for j in dict_code:
                             lisAUX=[]
                             for c in fj:
                                 '''
-                                Aclaraccion de los nombres de las variable:
+                                Aclaracion de los nombres de las variable:
                                 check4H= Check for hashing
                                 check4H_fun= Check for hashing in funcion
                                 '''
@@ -499,7 +499,7 @@ for j in dict_code:
                                     if variable_asignada!=check4H_fun:
                                         list_de_errores.append(Error(numeroLinea[0],1))
                             '''
-                            -Durrante el analizi del 'for' si algun char hace hash entonces ese char se guarda y se remplaza por un '',
+                            -Durante el analisis del 'for' si algun char hace hash entonces ese char se guarda y se remplaza por un '',
                             para despues analizar los otros valores primitivos en la funcion 'verificar_congruencia_de_tipo'
                             '''
                             fjaux=fj
@@ -558,7 +558,7 @@ for j in dict_code:
                     elif(dict_code.get(numeroLinea[1],None)!=None):#ANALISIS de asigncion a una variable global
                         """
                         Sabemos que estamos en......
-                        "ANALISIS de asigncion a una variable global"
+                        "ANALISIS de asignacion a una variable global"
                         """
                         variable_asignada=dict_code.get(numeroLinea[1],None)
                         variable_asignada=(variable_asignada.split("#"))[1]
@@ -571,7 +571,7 @@ for j in dict_code:
                             lisAUX=[]
                             for c in fj:
                                 '''
-                                Aclaraccion de los nombres de las variable:
+                                Aclaracion de los nombres de las variable:
                                 check4H= Check for hashing
                                 check4H_fun= Check for hashing in funcion
                                 '''
@@ -594,7 +594,7 @@ for j in dict_code:
                                     if variable_asignada!=check4H_fun:
                                         list_de_errores.append(Error(numeroLinea[0],4))
                             '''
-                            -Durrante el analizi del 'for' si algun char hace hash entonces ese char se guarda y se remplaza por un '',
+                            -Durante el analisis del 'for' si algun char hace hash entonces ese char se guarda y se remplaza por un '',
                             para despues analizar los otros valores primitivos en la funcion 'verificar_congruencia_de_tipo'
                             '''
                             fjaux=fj
