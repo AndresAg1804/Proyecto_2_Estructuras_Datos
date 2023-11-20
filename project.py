@@ -232,8 +232,21 @@ for j in dict_code:
         numLF=j.split('#')
         for fj in dict_code[j]:#vaya iterando por todas las llaves del dict interno
             if(fj=="if" or fj=="while"):
+                """
+                Caso de que la linea encuetre un "if" o "while"
+
+                Atributos:
+                numeroLinea = Lista que guarda el número de línea y sus parametros
+                aux = Lista que guarda los parametros de la función
+
+                """
+
                 numeroLinea=dict_code[j][fj].split("#")
+
                 aux=numeroLinea[1].split("_")
+
+                print(aux[0])
+                print(aux[1])
 
                 c1UNO=dict_code.get(aux[0],None)
                 c2DOS=dict_code.get(aux[1],None)
