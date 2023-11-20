@@ -1,10 +1,10 @@
-float x="juan"
+string x="juan"
 
 string funcion(float v, string n){
 string y="juan"
  if (v > n){
  n = 0
- x = "w"
+ x = x+"daf"-0+"dec"
  }
- return "juan"
+ return "pablo"
  }
