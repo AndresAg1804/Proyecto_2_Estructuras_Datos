@@ -181,7 +181,6 @@ for j in LineaXLinea:
             #Function key
             Fun_key=str(nL)+"#"+j[:posi].strip()
             tipoFun=j[:posi].strip()
-            print(tipoFun)
             dict_code[Fun_key]={}#DONE whith the return value, adding a new inner dictionary
             #adding varibles to the new inner dictionary:
             posi = j.find('{')
@@ -433,15 +432,17 @@ for j in dict_code:
                     dict_de_funci=dict_code.get(j,None)
                     variable_asignada=dict_de_funci.get(numeroLinea[1],None)
                     if(variable_asignada!=None):#ANALISIS de asigncion a una variable local
-                        print("ANALISIS de asigncion a una variable local")
+
+                        """
+                        "ANALISIS de asigncion a una variable local"
+                        """
+
                         variable_asignada=(variable_asignada.split("#"))[1]
                         posi=variable_asignada.find("_")
                         if(posi!=-1):
                             variable_asignada=variable_asignada[:posi]
                             variable_asignada=variable_asignada.removeprefix('_')
 
-                        print(variable_asignada)
-                        print(fj)
                         if (fj.find('+')!=-1) or (fj.find('-')!=-1) or (fj.find('/')!=-1) or (fj.find('%')!=-1) or (fj.find('*')!=-1):
                             lisAUX=[]
                             for c in fj:
@@ -493,7 +494,6 @@ for j in dict_code:
                                 if variable_asignada!=check4H_in_fun:
                                         list_de_errores.append(Error(numeroLinea[0],1))
                             else:
-                                print("a individual")
                                 if(variable_asignada=='float'):
                                     try:
                                         sera_float_value = float(fj)
@@ -510,8 +510,9 @@ for j in dict_code:
                                         list_de_errores.append(Error(numeroLinea[0],1))
 
                     elif(dict_code.get(numeroLinea[1],None)!=None):#ANALISIS de asigncion a una variable global
-                        
-                        print("ANALISIS de asigncion a una variable global")
+                        """"
+                        "ANALISIS de asigncion a una variable global"
+                        """
                         variable_asignada=dict_code.get(numeroLinea[1],None)
                         variable_asignada=(variable_asignada.split("#"))[1]
                         posi=variable_asignada.find("_")
@@ -519,8 +520,6 @@ for j in dict_code:
                             variable_asignada=variable_asignada[:posi]
                             variable_asignada=variable_asignada.removeprefix('_')
                             
-                        print(variable_asignada)
-                        print(fj)
                         if (fj.find('+')!=-1) or (fj.find('-')!=-1) or (fj.find('/')!=-1) or (fj.find('%')!=-1 or (fj.find('*')!=-1)):
                             lisAUX=[]
                             for c in fj:
@@ -567,7 +566,6 @@ for j in dict_code:
                                 if variable_asignada!=check4H_in_fun:
                                         list_de_errores.append(Error(numeroLinea[0],4))
                             else:
-                                print("a individual")
                                 if(variable_asignada=='float'):
                                     try:
                                         sera_float_value = float(fj)
@@ -615,25 +613,8 @@ for j in dict_code:
 
 
 
-print("-----------------------------------Diccionario Principal del Codigo---------------------------------------")
-pprint(dict_code)
-print("----------------------------------------------------------------------------------------------------------")
+
 print("-------------------------------------------Lista de Errores-----------------------------------------------")
 for i in range(0,len(list_de_errores)):
     list_de_errores[i].toString()
 print("----------------------------------------------------------------------------------------------------------")
-
-'''
------------------CODIGO DEL TXT-------------------------
-
-int x = 40
-int funcion(float v, string n){
- if (v > 0.0){
- n = “Mayor”
- x = x + 5
- }
- return n
- }
-
- -------------------------------------------------------
-'''
