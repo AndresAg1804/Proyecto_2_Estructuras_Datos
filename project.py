@@ -1,3 +1,16 @@
+"""
+    Proyecto 2 - Estructuras de Datos 
+    Integrantes:
+    Anner Angulo Gutierrez - 504530978
+    Juan Pablo Cartin Esquivel - 118760067
+    Marcos Vasquez Diaz - 801530366
+"""
+
+"""
+Limitaciones del proyecto conocidas:
+    - No se puede utilizar mas de un if o while
+"""
+
 #-Import-----------------------------------
 from pprint import pprint
 #-Import-----------------------------------
