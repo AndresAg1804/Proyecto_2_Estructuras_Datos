@@ -405,6 +405,10 @@ for j in dict_code:
                             list_de_errores.append(Error(numLF[0],3)) 
 
             elif ( ((dict_code[j][fj]).split('#'))[0]!= numLF[0]):
+                '''
+                - Aqui van a llegar todos los casos de asignacion '='
+                a continuaccion vamos a analisar los casos de una variable declara dentro de la funcion que no proviene de los parametros de la misma 
+                '''
                 if( ((dict_code[j][fj]).split('#'))[1].find('float')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('int')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('string')!=-1):#errores de locales
                     if(((dict_code[j][fj]).split('#'))[1].find('float')!=-1 ):
                         numeroLinea=dict_code[j][fj].split("#")
@@ -427,13 +431,24 @@ for j in dict_code:
                         else:
                             list_de_errores.append(Error(numeroLinea[0],1))
                 else:
+                    '''
+                    - Auqi van a llegar los casos que son de de asignacio '=' de X variable a Y variable
+                    en otras palabras donde aparecsa el '=' y no se este declarando una variable local de la funcion 
+                    '''
                     numeroLinea=dict_code[j][fj].split("#")
 
+                    '''
+                    Aqui se intenta siegamnete de asignar un dictionario a la variable
+                    dict_de_funci, para posteriormente tratar de hacer un hash y verificar si en 
+                    esta iteracion del dictionario general (dict_code) estamos en la llave de la funcion 
+                    que hashea a el dictionario interno
+                    '''
                     dict_de_funci=dict_code.get(j,None)
                     variable_asignada=dict_de_funci.get(numeroLinea[1],None)
                     if(variable_asignada!=None):#ANALISIS de asigncion a una variable local
 
                         """
+                        Sabemos que estamos en......
                         "ANALISIS de asigncion a una variable local"
                         """
 
@@ -447,12 +462,16 @@ for j in dict_code:
                             lisAUX=[]
                             for c in fj:
                                 '''
+                                Aclaraccion de los nombres de las variable:
                                 check4H= Check for hashing
                                 check4H_fun= Check for hashing in funcion
                                 '''
                                 check4H=dict_code.get(c,None)
                                 check4H_fun=dict_de_funci.get(c,None)
-
+                                '''
+                                si alguno es diferente de None y hashea un tipo de variable primitivo 
+                                estamos tratando con una variabel decalrada previamente (global o local a la funcion)
+                                '''
                                 if check4H != None and  (check4H.find('string')!=-1 or check4H.find('float')!=-1 or check4H.find('int')!=-1):
                                     check4H=(check4H.split('#'))[1]
                                     check4H=(check4H.split('_'))[0]
@@ -466,20 +485,34 @@ for j in dict_code:
                                     lisAUX.append(c)
                                     if variable_asignada!=check4H_fun:
                                         list_de_errores.append(Error(numeroLinea[0],1))
-                            ###################################################################
+                            '''
+                            -Durrante el analizi del 'for' si algun char hace hash entonces ese char se guarda y se remplaza por un '',
+                            para despues analizar los otros valores primitivos en la funcion 'verificar_congruencia_de_tipo'
+                            '''
                             fjaux=fj
                             for i in lisAUX:
                                  fjaux=fjaux.removeprefix(i)
-
+                            '''
+                            remplazo X ''
+                            '''
                             fjaux=fjaux.replace('+','_')
                             fjaux=fjaux.replace('/','_')
                             fjaux=fjaux.replace('-','_')
                             fjaux=fjaux.replace('%','_')
                             fjaux=fjaux.replace('*','_')
                             fjaux=fjaux.split('_')
+                            '''
+                            remplazo por cualquier operador para hacer el analisis 
+                            de los elementos restantes los cuales tienen que ser del tipo 
+                            acorde sino seria un error 
+                            '''
                             for i in fjaux:
                                 verificar_congruencia_de_tipo(variable_asignada,i)
                         else:
+                            '''
+                            -sino tiene un operando se analisa todo como un solo elemento a ver 
+                            si esta acorde, sea el mismo una variable (global o local) o elemento primitivo como (0.0, 1, "string") 
+                            '''
                             check4H=dict_code.get(fj,None)
                             check4H_in_fun=dict_de_funci.get(fj,None)
 
@@ -510,7 +543,8 @@ for j in dict_code:
                                         list_de_errores.append(Error(numeroLinea[0],1))
 
                     elif(dict_code.get(numeroLinea[1],None)!=None):#ANALISIS de asigncion a una variable global
-                        """"
+                        """
+                        Sabemos que estamos en......
                         "ANALISIS de asigncion a una variable global"
                         """
                         variable_asignada=dict_code.get(numeroLinea[1],None)
@@ -523,8 +557,17 @@ for j in dict_code:
                         if (fj.find('+')!=-1) or (fj.find('-')!=-1) or (fj.find('/')!=-1) or (fj.find('%')!=-1 or (fj.find('*')!=-1)):
                             lisAUX=[]
                             for c in fj:
+                                '''
+                                Aclaraccion de los nombres de las variable:
+                                check4H= Check for hashing
+                                check4H_fun= Check for hashing in funcion
+                                '''
                                 check4H=dict_code.get(c,None)
                                 check4H_fun=dict_de_funci.get(c,None)
+                                '''
+                                si alguno es diferente de None y hashea un tipo de variable primitivo 
+                                estamos tratando con una variabel decalrada previamente (global o local a la funcion)
+                                '''
                                 if check4H != None and  (check4H.find('string')!=-1 or check4H.find('float')!=-1 or check4H.find('int')!=-1):
                                     check4H=(check4H.split('#'))[1]
                                     check4H=(check4H.split('_'))[0]
@@ -537,21 +580,34 @@ for j in dict_code:
                                     lisAUX.append(c)
                                     if variable_asignada!=check4H_fun:
                                         list_de_errores.append(Error(numeroLinea[0],4))
-                            ##########################################33
+                            '''
+                            -Durrante el analizi del 'for' si algun char hace hash entonces ese char se guarda y se remplaza por un '',
+                            para despues analizar los otros valores primitivos en la funcion 'verificar_congruencia_de_tipo'
+                            '''
                             fjaux=fj
                             for i in lisAUX:
                                  fjaux=fjaux.replace(i,'')
-
+                            '''
+                            remplazo X ''
+                            '''
                             fjaux=fjaux.replace('+','_')
                             fjaux=fjaux.replace('/','_')
                             fjaux=fjaux.replace('-','_')
                             fjaux=fjaux.replace('%','_')
                             fjaux=fjaux.replace('*','_')
                             fjaux=fjaux.split('_')
+                            '''
+                            remplazo por cualquier operador para hacer el analisis 
+                            de los elementos restantes los cuales tienen que ser del tipo 
+                            acorde sino seria un error 
+                            '''
                             for i in fjaux:
                                 verificar_congruencia_de_tipo(variable_asignada,i)
                         else:
-                            #ver si le estoy asignando una variable a otra
+                            '''
+                            -sino tiene un operando se analisa todo como un solo elemento a ver 
+                            si esta acorde, sea el mismo una variable (global o local) o elemento primitivo como (0.0, 1, "string") 
+                            '''
                             check4H=dict_code.get(fj,None)
                             check4H_in_fun=dict_de_funci.get(fj,None)
 
@@ -584,13 +640,16 @@ for j in dict_code:
 
                     else:
                         list_de_errores.append(Error(numeroLinea[0],5))
-                    #list_de_errores.append(Error(numeroLinea[0],1))
-                    # operaciones de asignacion        
+                        """
+                         sino pasa nada de eso no esta decalra esa variable    
+                        """  
                     
     else:#errores de globales
         numLF=((dict_code[j]).split('#'))[0]
         a=((dict_code[j]).split('#'))[1]
-
+        """
+        a: seria el tipo de variable y si tiene '_' se le asigno un valor, que se verivica si es el adecudao segun el tipo  
+        """ 
         if(a.find('float')!=-1 and a.find('_')!=-1):
             tipoYvalor=a.split('_')
             try:
