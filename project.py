@@ -1,3 +1,16 @@
+"""
+    Proyecto 2 - Estructuras de Datos 
+    Integrantes:
+    Anner Angulo Gutierrez - 504530978
+    Juan Pablo Cartin Esquivel - 118760067
+    Marcos Vasquez Diaz - 801530366
+"""
+
+"""
+Limitaciones del proyecto conocidas:
+    - No se puede utilizar mas de un if o while
+"""
+
 #-Import-----------------------------------
 from pprint import pprint
 #-Import-----------------------------------
@@ -12,12 +25,12 @@ for i in content2:
     LineaXLinea.append(i)
 
 dict_ERRORES = {
-    0: 'valor de retorno invalido',
+    0: 'valor de retorno invalido(no existe la variable en el diccionario)',
     1: 'asignacion de valor invalida hacia una variable', 
     2: 'comparacion invalida de tipo de variable en condicional ',
-    3: 'valor de retorno invalido',
+    3: 'valor de retorno invalido(El tipo de retorno no coincide con el tipo de la funcion)',
     4: 'asignacion de valor invalida hacia una variable Global', 
-    5: 'variable no decalrda' 
+    5: 'variable no declarada' 
 }
 #---------------------------------Error Class----------------------------------------------
 class Error:
@@ -32,11 +45,25 @@ class Error:
         error_type = dict_ERRORES.get(self.codeError, "that error code is not in dict_ERRORES")
         print(f"ERROR: Linea: #{str(self.nl)} Tipo de Error: [{error_type}]")
 #---------------------------------Error Class----------------------------------------------
+def verificar_congruencia_de_tipo(tipo,linea):
+    if linea!='':
+        if(tipo=='float'):
+            try:
+                sera_float_value = float(linea)
+            except ValueError:
+                list_de_errores.append(Error(numeroLinea[0],4))
+        elif(tipo=='int'):
+            if(linea.isdecimal()!=True):
+                list_de_errores.append(Error(numeroLinea[0],4))
+        else:
+            single_quotes = ''+linea+''
+            if '\"' in single_quotes:
+                None
+            else:
+                list_de_errores.append(Error(numeroLinea[0],4))
 
     #nota: how can I get the dict value with out a KeyError: 
     #like so...
-print(dict_ERRORES.get(9,"Key not in dict_ERRORES"))
-print(dict_ERRORES.get(10,"Key not in dict_ERRORES"))
 print("-----------------------------------Lista para saber el # de linea---------------------------------------")
 pprint(LineaXLinea)
 print("--------------------------------------------------------------------------------------------------------")
@@ -44,6 +71,7 @@ dict_code={}
 Fun_key=''
 InFUN=False
 nL=1
+tipoFun=''
 for j in LineaXLinea:
     #function key = Fun_key
     # if the varible 'INFUN'==Treu we are in a function so we will add values to... 
@@ -165,6 +193,7 @@ for j in LineaXLinea:
             posi=j.find(' ')
             #Function key
             Fun_key=str(nL)+"#"+j[:posi].strip()
+            tipoFun=j[:posi].strip()
             dict_code[Fun_key]={}#DONE whith the return value, adding a new inner dictionary
             #adding varibles to the new inner dictionary:
             posi = j.find('{')
@@ -216,7 +245,23 @@ for j in dict_code:
         numLF=j.split('#')
         for fj in dict_code[j]:#vaya iterando por todas las llaves del dict interno
             if(fj=="if" or fj=="while"):
+                """
+                Caso de que la linea encuetre un "if" o "while"
+
+                Atributos:
+                numeroLinea = Lista que guarda el número de línea y sus parametros
+                aux = Lista que guarda los parametros de la función
+                c1UNO = Variable que guarda el valor de la la variable si es global, en caso de no ser, guarda None
+                c2DOS = Variable que guarda el valor de la la variable si es global, en caso de no ser, guarda None
+                c3TRES = Variable que guarda el valor de la la variable si es local, en caso de no ser, guarda None
+                c4CUATRO = Variable que guarda el valor de la la variable si es local, en caso de no ser, guarda None
+
+                Los if y elif que se desarrollan más adelante son la lógica que se implementó según el tipo de la variable (global o local) y sus combinaciones.
+
+                """
+
                 numeroLinea=dict_code[j][fj].split("#")
+
                 aux=numeroLinea[1].split("_")
 
                 c1UNO=dict_code.get(aux[0],None)
@@ -235,6 +280,12 @@ for j in dict_code:
                 elif (c1UNO!=None and c4CUATRO!=None):
                     c4CUATRO=c4CUATRO.split("#")
                     c1UNO=c1UNO.split("#")
+                    if c4CUATRO[1].find('_')!=-1:
+                        c4CUATRO[1]=c4CUATRO[1].split('_')
+                        c4CUATRO[1]=c4CUATRO[1][0]
+                    if c1UNO[1].find('_')!=-1:
+                        c1UNO[1]=c1UNO[1].split('_')
+                        c1UNO[1]=c1UNO[1][0]
                     if(c1UNO[1]=='string' and c4CUATRO[1]!='string'):
                         list_de_errores.append(Error(numeroLinea[0],2))
                     elif(c4CUATRO[1]=='string' and c1UNO[1]!='string'):
@@ -243,6 +294,12 @@ for j in dict_code:
                 elif (c2DOS!=None and c3TRES!=None):
                     c3TRES=c3TRES.split("#")
                     c2DOS=c2DOS.split("#")
+                    if c3TRES[1].find('_')!=-1:
+                        c3TRES[1]=c3TRES[1].split('_')
+                        c3TRES[1]=c3TRES[1][0]
+                    if c2DOS[1].find('_')!=-1:
+                        c2DOS[1]=c2DOS[1].split('_')
+                        c2DOS[1]=c2DOS[1][0]
                     if(c3TRES[1]=='string' and c2DOS[1]!='string'):
                         list_de_errores.append(Error(numeroLinea[0],2))
                     elif(c2DOS[1]=='string' and c3TRES[1]!='string'):
@@ -250,22 +307,121 @@ for j in dict_code:
                 elif (c4CUATRO!=None and c3TRES!=None):
                     c4CUATRO=c4CUATRO.split("#")
                     c3TRES=c3TRES.split("#")
+                    if c4CUATRO[1].find('_')!=-1:
+                        c4CUATRO[1]=c4CUATRO[1].split('_')
+                        c4CUATRO[1]=c4CUATRO[1][0]
+                    if c3TRES[1].find('_')!=-1:
+                        c3TRES[1]=c3TRES[1].split('_')
+                        c3TRES[1]=c3TRES[1][0]
+
                     if(c3TRES[1]=='string' and c4CUATRO[1]!='string'):
                         list_de_errores.append(Error(numeroLinea[0],2))
                     elif(c4CUATRO[1]=='string' and c3TRES[1]!='string'):
                         list_de_errores.append(Error(numeroLinea[0],2))
                 elif(c1UNO!=None):#encontro global
-                    print()
+                    c1UNO=c1UNO.split("#")
+                    numeroLinea=dict_code[j][fj].split("#")
+                    analisisIF=numeroLinea[1].split('_')
+                    analisisIF[1].isdecimal()
+                    if c1UNO[1].find('_')!=-1:
+                        c1UNO[1]=c1UNO[1].split('_')
+                        c1UNO[1]=c1UNO[1][0]
+                    if analisisIF[1].isdecimal() == False and c1UNO[1]!='string':
+                        list_de_errores.append(Error(numeroLinea[0],2))
+                    elif analisisIF[1].isdecimal() == True and c1UNO[1]=='string':
+                        list_de_errores.append(Error(numeroLinea[0],2))
+                    
                 elif(c2DOS!=None ):#encontro global
-                    print()
+                    c2DOS=c2DOS.split("#")
+                    numeroLinea=dict_code[j][fj].split("#")
+                    analisisIF=numeroLinea[1].split('_')
+                    analisisIF[1].isdecimal()
+                    if c2DOS[1].find('_')!=-1:
+                        c2DOS[1]=c2DOS[1].split('_')
+                        c2DOS[1]=c2DOS[1][0]
+                    if analisisIF[1].isdecimal() == False and c2DOS[1]!='string':
+                        list_de_errores.append(Error(numeroLinea[0],2))
+                    elif analisisIF[1].isdecimal() == True and c2DOS[1]=='string':
+                        list_de_errores.append(Error(numeroLinea[0],2))
                 elif(c3TRES!=None):#encontro local
-                    print()
+                    c3TRES=c3TRES.split("#")
+                    numeroLinea=dict_code[j][fj].split("#")
+                    analisisIF=numeroLinea[1].split('_')
+                    analisisIF[1].isdecimal()
+                    if c3TRES[1].find('_')!=-1:
+                        c3TRES[1]=c3TRES[1].split('_')
+                        c3TRES[1]=c3TRES[1][0]
+                    if analisisIF[1].isdecimal() == False and c3TRES[1]!='string':
+                        list_de_errores.append(Error(numeroLinea[0],2))
+                    elif analisisIF[1].isdecimal() == True and c3TRES[1]=='string':
+                        list_de_errores.append(Error(numeroLinea[0],2))
                 elif(c4CUATRO!=None ):#encontro local
-                    print()
-            elif(fj=='return'):
-               varReturn=dict_code[j][fj]
+                    c4CUATRO=c4CUATRO.split("#")
+                    numeroLinea=dict_code[j][fj].split("#")
+                    analisisIF=numeroLinea[1].split('_')
+                    analisisIF[1].isdecimal()
+                    if c4CUATRO[1].find('_')!=-1:
+                        c4CUATRO[1]=c4CUATRO[1].split('_')
+                        c4CUATRO[1]=c4CUATRO[1][0]
+                    if analisisIF[1].isdecimal() == False and c4CUATRO[1]!='string':
+                        list_de_errores.append(Error(numeroLinea[0],2))
+                    elif analisisIF[1].isdecimal() == True and c4CUATRO[1]=='string':
+                        list_de_errores.append(Error(numeroLinea[0],2))
+            elif fj == 'return':
+             
+             """
+             Caso de que la linea encuetre un "return"
+
+             Variables utilizadas:
+             varReturn = Lista que guarda el número de linea y la variable de retorno de la función
+             numLF = número de linea donde se encuentra el "return"
+             cod = variable de retorno de la función
+             cod_value = Lista que guarda el tipo de la variable y la variable
+             cod_ValueOriginal = Guarda el tipo de de la variable, para compararlo con tipoFun
+             tipoFun = Tipo de la función
+             single_quotes = Pequeño truco para saber si la variable es un string que viene encerrado en " "
+             """
+             varReturn = dict_code[j][fj].split("#")
+             numLF[0] = varReturn[0]
+    
+             # nombre de la variable o el tipo de retorno de la función
+             cod = varReturn[1]
+             # Verifica si la variable de retorno existe en el diccionario
+             if cod in dict_code[j]:
+                cod_value = dict_code[j][cod].split("#")
+
+             # Compara el tipo de retorno con el tipo especificado al declarar la función
+                if cod_value[1] != tipoFun:
+                 list_de_errores.append(Error(numLF[0], 3))
+             else:
+               if cod in dict_code:
+                 cod_value = dict_code[cod].split("#")
+                 cod_valueOriginal = cod_value[1].split("_")
+                 if cod_valueOriginal[0] != tipoFun:
+                   list_de_errores.append(Error(numLF[0], 3))
+               else:
+                    if tipoFun =="string":
+                        single_quotes = ''+cod+''
+                        if '\"' in single_quotes:
+                            None
+                        else:
+                            list_de_errores.append(Error(numLF[0],3))
+                    elif tipoFun =="float":
+                        
+                        try:
+                            cod = float(cod)
+                        except ValueError:
+                            list_de_errores.append(Error(numLF[0],3))
+
+                    elif tipoFun =="int":
+                        if(cod.isdecimal()!=True):
+                            list_de_errores.append(Error(numLF[0],3)) 
 
             elif ( ((dict_code[j][fj]).split('#'))[0]!= numLF[0]):
+                '''
+                - Aqui van a llegar todos los casos de asignacion '='
+                a continuaccion vamos a analisar los casos de una variable declara dentro de la funcion que no proviene de los parametros de la misma 
+                '''
                 if( ((dict_code[j][fj]).split('#'))[1].find('float')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('int')!=-1 or ((dict_code[j][fj]).split('#'))[1].find('string')!=-1):#errores de locales
                     if(((dict_code[j][fj]).split('#'))[1].find('float')!=-1 ):
                         numeroLinea=dict_code[j][fj].split("#")
@@ -288,23 +444,122 @@ for j in dict_code:
                         else:
                             list_de_errores.append(Error(numeroLinea[0],1))
                 else:
-                    print()
+                    '''
+                    - Aqui van a llegar los casos que son de de asignacio '=' de X variable a Y variable
+                    en otras palabras donde aparecsa el '=' y no se este declarando una variable local de la funcion 
+                    '''
                     numeroLinea=dict_code[j][fj].split("#")
 
+                    '''
+                    Aqui se intenta siegamnete de asignar un dictionario a la variable
+                    dict_de_funci, para posteriormente tratar de hacer un hash y verificar si en 
+                    esta iteracion del dictionario general (dict_code) estamos en la llave de la funcion 
+                    que hashea a el dictionario interno
+                    '''
                     dict_de_funci=dict_code.get(j,None)
                     variable_asignada=dict_de_funci.get(numeroLinea[1],None)
                     if(variable_asignada!=None):#ANALISIS de asigncion a una variable local
-                        print("ANALISIS de asigncion a una variable local")
+
+                        """
+                        Sabemos que estamos en......
+                        "ANALISIS de asigncion a una variable local"
+                        """
+
                         variable_asignada=(variable_asignada.split("#"))[1]
                         posi=variable_asignada.find("_")
                         if(posi!=-1):
                             variable_asignada=variable_asignada[:posi]
                             variable_asignada=variable_asignada.removeprefix('_')
 
-                        print(variable_asignada)
-                        print(fj)
+                        if (fj.find('+')!=-1) or (fj.find('-')!=-1) or (fj.find('/')!=-1) or (fj.find('%')!=-1) or (fj.find('*')!=-1):
+                            lisAUX=[]
+                            for c in fj:
+                                '''
+                                Aclaracion de los nombres de las variable:
+                                check4H= Check for hashing
+                                check4H_fun= Check for hashing in funcion
+                                '''
+                                check4H=dict_code.get(c,None)
+                                check4H_fun=dict_de_funci.get(c,None)
+                                '''
+                                si alguno es diferente de None y hashea un tipo de variable primitivo 
+                                estamos tratando con una variabel decalrada previamente (global o local a la funcion)
+                                '''
+                                if check4H != None and  (check4H.find('string')!=-1 or check4H.find('float')!=-1 or check4H.find('int')!=-1):
+                                    check4H=(check4H.split('#'))[1]
+                                    check4H=(check4H.split('_'))[0]
+                                    lisAUX.append(c)
+                                    if variable_asignada!=check4H:
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+
+                                elif check4H_fun != None  and (check4H_in_fun.find('string')!=-1 or check4H_in_fun.find('float')!=-1 or check4H_in_fun.find('int')!=-1):
+                                    check4H_fun=(check4H_fun.split('#'))[1]
+                                    check4H_fun=(check4H_fun.split('_'))[0]
+                                    lisAUX.append(c)
+                                    if variable_asignada!=check4H_fun:
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+                            '''
+                            -Durante el analisis del 'for' si algun char hace hash entonces ese char se guarda y se remplaza por un '',
+                            para despues analizar los otros valores primitivos en la funcion 'verificar_congruencia_de_tipo'
+                            '''
+                            fjaux=fj
+                            for i in lisAUX:
+                                 fjaux=fjaux.removeprefix(i)
+                            '''
+                            remplazo X ''
+                            '''
+                            fjaux=fjaux.replace('+','_')
+                            fjaux=fjaux.replace('/','_')
+                            fjaux=fjaux.replace('-','_')
+                            fjaux=fjaux.replace('%','_')
+                            fjaux=fjaux.replace('*','_')
+                            fjaux=fjaux.split('_')
+                            '''
+                            remplazo por cualquier operador para hacer el analisis 
+                            de los elementos restantes los cuales tienen que ser del tipo 
+                            acorde sino seria un error 
+                            '''
+                            for i in fjaux:
+                                verificar_congruencia_de_tipo(variable_asignada,i)
+                        else:
+                            '''
+                            -sino tiene un operando se analisa todo como un solo elemento a ver 
+                            si esta acorde, sea el mismo una variable (global o local) o elemento primitivo como (0.0, 1, "string") 
+                            '''
+                            check4H=dict_code.get(fj,None)
+                            check4H_in_fun=dict_de_funci.get(fj,None)
+
+                            if check4H !=None and  (check4H.find('string')!=-1 or check4H.find('float')!=-1 or check4H.find('int')!=-1):
+                                check4H=(check4H.split('#'))[1]
+                                check4H=(check4H.split('_'))[0]
+                                if variable_asignada!=check4H:
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+                            elif check4H_in_fun !=None and (check4H_in_fun.find('string')!=-1 or check4H_in_fun.find('float')!=-1 or check4H_in_fun.find('int')!=-1):
+                                check4H_in_fun=(check4H_in_fun.split('#'))[1]
+                                check4H_in_fun=(check4H_in_fun.split('_'))[0]
+                                if variable_asignada!=check4H_in_fun:
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+                            else:
+                                if(variable_asignada=='float'):
+                                    try:
+                                        sera_float_value = float(fj)
+                                    except ValueError:
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+                                elif(variable_asignada=='int'):
+                                    if(fj.isdecimal()!=True):
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+                                else:
+                                    single_quotes = ''+fj+''
+                                    if '\"' in single_quotes:
+                                        None
+                                    else:
+                                        list_de_errores.append(Error(numeroLinea[0],1))
+
                     elif(dict_code.get(numeroLinea[1],None)!=None):#ANALISIS de asigncion a una variable global
-                        print("ANALISIS de asigncion a una variable global")
+                        """
+                        Sabemos que estamos en......
+                        "ANALISIS de asignacion a una variable global"
+                        """
                         variable_asignada=dict_code.get(numeroLinea[1],None)
                         variable_asignada=(variable_asignada.split("#"))[1]
                         posi=variable_asignada.find("_")
@@ -312,17 +567,102 @@ for j in dict_code:
                             variable_asignada=variable_asignada[:posi]
                             variable_asignada=variable_asignada.removeprefix('_')
                             
-                        print(variable_asignada)
-                        print(fj)
+                        if (fj.find('+')!=-1) or (fj.find('-')!=-1) or (fj.find('/')!=-1) or (fj.find('%')!=-1 or (fj.find('*')!=-1)):
+                            lisAUX=[]
+                            for c in fj:
+                                '''
+                                Aclaracion de los nombres de las variable:
+                                check4H= Check for hashing
+                                check4H_fun= Check for hashing in funcion
+                                '''
+                                check4H=dict_code.get(c,None)
+                                check4H_fun=dict_de_funci.get(c,None)
+                                '''
+                                si alguno es diferente de None y hashea un tipo de variable primitivo 
+                                estamos tratando con una variabel decalrada previamente (global o local a la funcion)
+                                '''
+                                if check4H != None and  (check4H.find('string')!=-1 or check4H.find('float')!=-1 or check4H.find('int')!=-1):
+                                    check4H=(check4H.split('#'))[1]
+                                    check4H=(check4H.split('_'))[0]
+                                    lisAUX.append(c)
+                                    if variable_asignada!=check4H:
+                                        list_de_errores.append(Error(numeroLinea[0],4))
+                                elif check4H_fun != None  and (check4H_fun.find('string')!=-1 or check4H_fun.find('float')!=-1 or check4H_fun.find('int')!=-1):
+                                    check4H_fun=(check4H_fun.split('#'))[1]
+                                    check4H_fun=(check4H_fun.split('_'))[0]
+                                    lisAUX.append(c)
+                                    if variable_asignada!=check4H_fun:
+                                        list_de_errores.append(Error(numeroLinea[0],4))
+                            '''
+                            -Durante el analisis del 'for' si algun char hace hash entonces ese char se guarda y se remplaza por un '',
+                            para despues analizar los otros valores primitivos en la funcion 'verificar_congruencia_de_tipo'
+                            '''
+                            fjaux=fj
+                            for i in lisAUX:
+                                 fjaux=fjaux.replace(i,'')
+                            '''
+                            remplazo X ''
+                            '''
+                            fjaux=fjaux.replace('+','_')
+                            fjaux=fjaux.replace('/','_')
+                            fjaux=fjaux.replace('-','_')
+                            fjaux=fjaux.replace('%','_')
+                            fjaux=fjaux.replace('*','_')
+                            fjaux=fjaux.split('_')
+                            '''
+                            remplazo por cualquier operador para hacer el analisis 
+                            de los elementos restantes los cuales tienen que ser del tipo 
+                            acorde sino seria un error 
+                            '''
+                            for i in fjaux:
+                                verificar_congruencia_de_tipo(variable_asignada,i)
+                        else:
+                            '''
+                            -sino tiene un operando se analisa todo como un solo elemento a ver 
+                            si esta acorde, sea el mismo una variable (global o local) o elemento primitivo como (0.0, 1, "string") 
+                            '''
+                            check4H=dict_code.get(fj,None)
+                            check4H_in_fun=dict_de_funci.get(fj,None)
+
+                            if check4H !=None and  (check4H.find('string')!=-1 or check4H.find('float')!=-1 or check4H.find('int')!=-1):
+                                check4H=(check4H.split('#'))[1]
+                                check4H=(check4H.split('_'))[0]
+                                if variable_asignada!=check4H:
+                                        list_de_errores.append(Error(numeroLinea[0],4))
+                            elif check4H_in_fun !=None and (check4H_in_fun.find('string')!=-1 or check4H_in_fun.find('float')!=-1 or check4H_in_fun.find('int')!=-1):
+                                check4H_in_fun=(check4H_in_fun.split('#'))[1]
+                                check4H_in_fun=(check4H_in_fun.split('_'))[0]
+                                if variable_asignada!=check4H_in_fun:
+                                        list_de_errores.append(Error(numeroLinea[0],4))
+                            else:
+                                if(variable_asignada=='float'):
+                                    try:
+                                        sera_float_value = float(fj)
+                                    except ValueError:
+                                        list_de_errores.append(Error(numeroLinea[0],4))
+                                elif(variable_asignada=='int'):
+                                    if(fj.isdecimal()!=True):
+                                        list_de_errores.append(Error(numeroLinea[0],4))
+                                else:
+                                    single_quotes = ''+fj+''
+                                    if '\"' in single_quotes:
+                                        None
+                                    else:
+                                        list_de_errores.append(Error(numeroLinea[0],4))                                
+
+
                     else:
                         list_de_errores.append(Error(numeroLinea[0],5))
-                    #list_de_errores.append(Error(numeroLinea[0],1))
-                    # operaciones de asignacion        
+                        """
+                         sino pasa nada de eso no esta decalra esa variable    
+                        """  
                     
     else:#errores de globales
         numLF=((dict_code[j]).split('#'))[0]
         a=((dict_code[j]).split('#'))[1]
-
+        """
+        a: seria el tipo de variable y si tiene '_' se le asigno un valor, que se verivica si es el adecudao segun el tipo  
+        """ 
         if(a.find('float')!=-1 and a.find('_')!=-1):
             tipoYvalor=a.split('_')
             try:
@@ -345,25 +685,8 @@ for j in dict_code:
 
 
 
-print("-----------------------------------Diccionario Principal del Codigo---------------------------------------")
-pprint(dict_code)
-print("----------------------------------------------------------------------------------------------------------")
+
 print("-------------------------------------------Lista de Errores-----------------------------------------------")
 for i in range(0,len(list_de_errores)):
     list_de_errores[i].toString()
 print("----------------------------------------------------------------------------------------------------------")
-
-'''
------------------CODIGO DEL TXT-------------------------
-
-int x = 40
-int funcion(float v, string n){
- if (v > 0.0){
- n = “Mayor”
- x = x + 5
- }
- return n
- }
-
- -------------------------------------------------------
-'''
