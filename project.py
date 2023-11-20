@@ -17,7 +17,7 @@ dict_ERRORES = {
     2: 'comparacion invalida de tipo de variable en condicional ',
     3: 'valor de retorno invalido(El tipo de retorno no coincide con el tipo de la funcion)',
     4: 'asignacion de valor invalida hacia una variable Global', 
-    5: 'variable no decalrda' 
+    5: 'variable no declarada' 
 }
 #---------------------------------Error Class----------------------------------------------
 class Error:
